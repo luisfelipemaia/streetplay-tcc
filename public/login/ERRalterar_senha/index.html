@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alterar Senha</title>
+  <link rel="stylesheet" href="style_altpass.css">
+</head>
+
+<body>
+
+  <header>
+    <nav class="navbar-not">
+      <a class="navbar_btn" href="../../login/login.html">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="header">
+        <h1>Nova Senha</h1>
+      </div>
+      <form id="change-password-form" class="form">
+        <label for="email">Insira seu email</label>
+        <input type="email" id="email" placeholder="example@example.com" required>
+
+        <label for="new-password">Nova Senha</label>
+        <div class="password-field">
+          <input type="password" id="new-password" placeholder="Nova Senha" required>
+          <button type="button" class="toggle-password"></button>
+        </div>
+
+        <label for="confirm-password">Confirmar Senha</label>
+        <input type="password" id="confirm-password" placeholder="Confirmar Senha" required>
+
+        <button type="submit" class="btn-save">Salvar</button>
+      </form>
+    </div>
+  </main>
+
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <!-- Script para ícones Ionicons -->
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+  <!-- Script para enviar a requisição -->
+  <script>
+    document.getElementById('change-password-form').addEventListener('submit', async (event) => {
+      event.preventDefault(); // Impede o envio padrão do formulário
+
+      const email = document.getElementById('email').value;
+      const newPassword = document.getElementById('new-password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+
+      // Verifica se as senhas coincidem
+      if (newPassword !== confirmPassword) {
+        alert("As senhas não coincidem!");
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:7777/${email}/rec`, { // Ajuste a URL conforme necessário
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ newPassword }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Erro ao alterar a senha');
+        }
+
+        const result = await response.json();
+        alert("Senha alterada com sucesso!");
+        window.location.href = '../login.html';
+      } catch (error) {
+        console.error(error);
+        alert("Ocorreu um erro ao alterar a senha.");
+      }
+    });
+  </script>
+
+</body>
+
+</html>
